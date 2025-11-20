@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'Argent CF';
+  src: url('/fonts/ArgentCF-Regular.woff2') format('woff2'),
+       url('/fonts/ArgentCF-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-cursive {
+  font-family: 'Great Vibes', cursive;
+}
+
+/* Open Sans for content paragraphs */
+p {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* DM Serif Text for headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Serif Text', serif;
+}
+
+/* Custom Swiper Pagination Styles */
+.custom-swiper-bullet {
+  background-color: #664930 !important;
+  opacity: 0.5 !important;
+}
+
+.custom-swiper-bullet-active {
+  background-color: #664930 !important;
+  opacity: 1 !important;
+}
