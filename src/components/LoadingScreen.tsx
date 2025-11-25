@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface LoadingScreenProps {
@@ -10,20 +10,25 @@ interface LoadingScreenProps {
   onFinished?: () => void;
 }
 
-const EXIT_DURATION = 2000; // 2 seconds for the swipe-up animation
+const EXIT_DURATION = 2000; // 2 seconds
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
   loading,
   logoSrc = "/Fortune One.png",
   loadingText,
-  bgColor = "#F7E9DD", // NO WHITE FLASH
+  bgColor = "#F7E9DD", // beige – no blue/white
   exitAfterMs = EXIT_DURATION,
   onFinished,
 }) => {
+  // 👇 KEY CHANGE:
+  // Start as visible on FIRST RENDER no matter what `loading` prop is.
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    // When `loading` is false, start exit timer
     if (!loading) {
       const t = setTimeout(() => {
+        setVisible(false);
         if (onFinished) onFinished();
       }, exitAfterMs);
       return () => clearTimeout(t);
@@ -33,19 +38,21 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   const phrase = loadingText || "Live Better, Live Fortune";
   const letters = phrase.split("");
 
+  // We only depend on our own `visible` flag for showing/hiding.
   return (
-    <AnimatePresence mode="wait">
-      {loading && (
+    <AnimatePresence initial={false}>
+      {visible && (
         <motion.div
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: bgColor,
+            backgroundColor: bgColor,
             pointerEvents: "none",
           }}
-          initial={{ y: 0, opacity: 1 }}
-          animate={{ y: 0, opacity: 1 }}
+          // no fancy entrance — just be there
+          initial={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{
             y: "-100%",
             transition: { duration: EXIT_DURATION / 1000, ease: "easeInOut" },
@@ -66,6 +73,10 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
             animate={{
               opacity: 1,
               transition: { duration: 0.8, ease: "easeOut" },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.4, ease: "easeInOut" },
             }}
           >
             {/* LOGO */}
