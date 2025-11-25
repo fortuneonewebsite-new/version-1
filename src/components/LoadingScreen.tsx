@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface LoadingScreenProps {
@@ -10,46 +10,48 @@ interface LoadingScreenProps {
   onFinished?: () => void;
 }
 
+const EXIT_DURATION = 2000; // 2 seconds for the swipe-up animation
+
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
   loading,
   logoSrc = "/Fortune One.png",
   loadingText,
-  bgColor = "#FFFFFF",
+  bgColor = "#F7E9DD", // NO WHITE FLASH
+  exitAfterMs = EXIT_DURATION,
   onFinished,
 }) => {
-  const [start, setStart] = useState(false);
-
-  const phrase = "Live Better, Live Fortune";
-
-  // Split into letters
-  const letters = phrase.split("");
 
   useEffect(() => {
     if (!loading) {
-      setStart(true);
-      const t = setTimeout(() => onFinished && onFinished(), 700);
+      const t = setTimeout(() => {
+        if (onFinished) onFinished();
+      }, exitAfterMs);
       return () => clearTimeout(t);
-    } else {
-      setStart(false);
     }
-  }, [loading, onFinished]);
+  }, [loading, exitAfterMs, onFinished]);
+
+  const phrase = loadingText || "Live Better, Live Fortune";
+  const letters = phrase.split("");
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {loading && (
         <motion.div
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            pointerEvents: "none",
             background: bgColor,
+            pointerEvents: "none",
           }}
-          initial={{ y: 0 }}
-          animate={{ y: 0 }}
-          exit={{ y: "-100%", transition: { duration: 2.5, ease: "easeInOut" } }}
+          initial={{ y: 0, opacity: 1 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{
+            y: "-100%",
+            transition: { duration: EXIT_DURATION / 1000, ease: "easeInOut" },
+          }}
         >
-          {/* Centered LOGO + TEXT */}
+          {/* CENTER CONTENT */}
           <motion.div
             style={{
               position: "absolute",
@@ -58,63 +60,55 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              pointerEvents: "none",
-              zIndex: 30,
+              zIndex: 10,
             }}
-              animate={
-                start
-                  ? { opacity: 0, transition: { duration: 1, ease: "easeInOut" } }
-                  : { opacity: 1 }
-              }
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { duration: 0.8, ease: "easeOut" },
+            }}
           >
             {/* LOGO */}
             <motion.img
               src={logoSrc}
               alt="logo"
               style={{
-                width: 280,
-                height: 280,
+                width: 260,
+                height: 260,
                 objectFit: "contain",
-                pointerEvents: "none",
-                marginBottom: 0,
               }}
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              initial={{ y: 80, opacity: 0, scale: 1.05 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
 
-            {/* 🔥 ANIMATED TEXT */}
+            {/* LETTER ANIMATION */}
             <motion.div
               style={{
                 display: "flex",
-                gap: 0,
-                marginTop: 0,
-                color: "#333333",
+                marginTop: -10,
+                color: "#333",
                 fontSize: 26,
-                fontWeight: 300,
                 letterSpacing: "0.5px",
-                pointerEvents: "none",
                 textTransform: "uppercase",
+                fontWeight: 300,
                 fontFamily: "'Tempus Sans ITC', sans-serif",
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
             >
-              {letters.map((char, index) => (
+              {letters.map((char, i) => (
                 <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: 20, scale: 1.3 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: 0.6 + index * 0.06,
-                    duration: 0.4,
+                    delay: 0.45 + i * 0.05,
+                    duration: 0.35,
                     ease: "easeOut",
                   }}
-                  style={{
-                    display: "inline-block",
-                    whiteSpace: "pre",
-                  }}
+                  style={{ whiteSpace: "pre" }}
                 >
                   {char}
                 </motion.span>
