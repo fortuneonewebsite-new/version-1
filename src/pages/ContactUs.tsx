@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const RECIPIENT_EMAIL = "huskanda7@gmail.com";
+const RECIPIENT_EMAIL = "ckrfreelancers@gmail.com";
 
 const ContactUs: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    description: ''
+    name: "",
+    phone: "",
+    email: "",
+    description: "",
   });
 
   const [sending, setSending] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   // Utility to open mail client via mailto, fallback copies to clipboard and alerts user
   const sendMailWithFallback = async (subject: string, body: string) => {
-    const mailto = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
 
     setSending(true);
     try {
@@ -30,14 +34,18 @@ const ContactUs: React.FC = () => {
     } catch (err) {
       // If that fails, attempt to open in new tab
       try {
-        window.open(mailto, '_blank');
+        window.open(mailto, "_blank");
       } catch (e) {
         // Last resort: copy to clipboard and alert user
         try {
           await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
-          alert(`Could not open mail client. Email text copied to clipboard. Please paste into an email to ${RECIPIENT_EMAIL}.`);
+          alert(
+            `Could not open mail client. Email text copied to clipboard. Please paste into an email to ${RECIPIENT_EMAIL}.`
+          );
         } catch (copyErr) {
-          alert(`Please email this to ${RECIPIENT_EMAIL}:\n\nSubject: ${subject}\n\n${body}`);
+          alert(
+            `Please email this to ${RECIPIENT_EMAIL}:\n\nSubject: ${subject}\n\n${body}`
+          );
         }
       }
     } finally {
@@ -50,30 +58,32 @@ const ContactUs: React.FC = () => {
 
     // Basic validation: at least name and phone or email
     if (!formData.name.trim()) {
-      alert('Please enter your name.');
+      alert("Please enter your name.");
       return;
     }
     if (!formData.phone.trim() && !formData.email.trim()) {
-      alert('Please provide at least a phone number or an email address.');
+      alert("Please provide at least a phone number or an email address.");
       return;
     }
 
-    const subject = 'Contact Request - Fortune One';
+    const subject = "Contact Request - Fortune One";
     const bodyLines = [
-      `Name: ${formData.name || 'N/A'}`,
-      `Phone: ${formData.phone || 'N/A'}`,
-      `Email: ${formData.email || 'N/A'}`,
-      `Description: ${formData.description || 'N/A'}`,
-      '',
-      '— Sent from Contact Us page'
+      `Name: ${formData.name || "N/A"}`,
+      `Phone: ${formData.phone || "N/A"}`,
+      `Email: ${formData.email || "N/A"}`,
+      `Description: ${formData.description || "N/A"}`,
+      "",
+      "— Sent from Contact Us page",
     ];
-    const body = bodyLines.join('\n');
+    const body = bodyLines.join("\n");
 
     await sendMailWithFallback(subject, body);
 
     // Reset form & give visual feedback
-    setFormData({ name: '', phone: '', email: '', description: '' });
-    alert('Thank you! The email composer should open. If not, the content was copied to your clipboard.');
+    setFormData({ name: "", phone: "", email: "", description: "" });
+    alert(
+      "Thank you! The email composer should open. If not, the content was copied to your clipboard."
+    );
   };
 
   return (
@@ -91,9 +101,15 @@ const ContactUs: React.FC = () => {
             <br />
             <span className="italic">with Fortune One</span>
           </div>
-          <p className="text-2xl mb-8 max-w-md leading-relaxed italic">Live better, live Fortune</p>
+          <p className="text-2xl mb-8 max-w-md leading-relaxed italic">
+            Live better, live Fortune
+          </p>
           <button
-            onClick={() => document.getElementById('contact-us-form')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() =>
+              document
+                .getElementById("contact-us-form")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
             className="bg-white text-[#997E67] hover:bg-[#664930] hover:text-white font-semibold py-4 px-10 rounded-full transition duration-300 text-lg"
           >
             Get in touch
@@ -107,11 +123,17 @@ const ContactUs: React.FC = () => {
           {/* Land & Collaboration */}
           <div className="bg-[#1a1a2e] text-white p-8 rounded-lg font-sans">
             <div className="border-l-4 border-[#d4a574] pl-4 mb-8">
-              <h3 className="text-lg font-normal font-sans">For Land & Collaboration</h3>
+              <h3 className="text-lg font-normal font-sans">
+                For Land & Collaboration
+              </h3>
             </div>
             <div className="space-y-4 text-sm">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
@@ -123,11 +145,17 @@ const ContactUs: React.FC = () => {
           {/* Sales and Support */}
           <div className="bg-[#1a1a2e] text-white p-8 rounded-lg font-sans">
             <div className="border-l-4 border-[#d4a574] pl-4 mb-8">
-              <h3 className="text-lg font-normal font-sans">For Sales and Support</h3>
+              <h3 className="text-lg font-normal font-sans">
+                For Sales and Support
+              </h3>
             </div>
             <div className="space-y-4 text-sm">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
@@ -143,7 +171,11 @@ const ContactUs: React.FC = () => {
             </div>
             <div className="space-y-4 text-sm">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-5 h-5 text-[#d4a574] flex-shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
@@ -159,11 +191,19 @@ const ContactUs: React.FC = () => {
         <div className="max-w-4xl mx-auto px-8">
           <div className="flex justify-center">
             <div className="w-full max-w-2xl">
-              <h2 className="text-4xl font-bodoni italic text-[#664930] mb-12 text-center">Begin Your Journey With Us</h2>
+              <h2 className="text-4xl font-bodoni italic text-[#664930] mb-12 text-center">
+                Begin Your Journey With Us
+              </h2>
 
-              <form id="contact-us-form" className="space-y-8" onSubmit={handleSubmit}>
+              <form
+                id="contact-us-form"
+                className="space-y-8"
+                onSubmit={handleSubmit}
+              >
                 <div>
-                  <label className="block text-[#664930] mb-2 text-sm font-medium">Name</label>
+                  <label className="block text-[#664930] mb-2 text-sm font-medium">
+                    Name
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -175,7 +215,9 @@ const ContactUs: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#664930] mb-2 text-sm font-medium">Phone</label>
+                  <label className="block text-[#664930] mb-2 text-sm font-medium">
+                    Phone
+                  </label>
                   <input
                     type="tel"
                     name="phone"
@@ -187,7 +229,9 @@ const ContactUs: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#664930] mb-2 text-sm font-medium">Email</label>
+                  <label className="block text-[#664930] mb-2 text-sm font-medium">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -199,7 +243,9 @@ const ContactUs: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#664930] mb-2 text-sm font-medium">Description</label>
+                  <label className="block text-[#664930] mb-2 text-sm font-medium">
+                    Description
+                  </label>
                   <textarea
                     name="description"
                     value={formData.description}
@@ -216,11 +262,10 @@ const ContactUs: React.FC = () => {
                     disabled={sending}
                     className="bg-[#664930] text-white font-medium py-3 px-12 hover:bg-[#997E67] transition duration-300 mt-4 disabled:opacity-60"
                   >
-                    {sending ? 'Preparing...' : 'Submit'}
+                    {sending ? "Preparing..." : "Submit"}
                   </button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
